@@ -1,0 +1,8 @@
+
+overlay chrome://scrapbook/content/scrapbook.xul	chrome://sbmaf/content/scrapbookOverlay.xul
+overlay	chrome://scrapbook/content/tree.xul	chrome://sbmaf/content/treeOverlay.xul
+
+content	sbmaf	jar:chrome/sbmaf.jar!/content/
+
+locale	sbmaf	en-US	jar:chrome/sbmaf.jar!/locale/en-US/
+
