@@ -50,8 +50,8 @@
 
   <prefpane id="pane1" label="&pane1.title;">
     <preferences>
-      <preference id="outputpath" name="scrapbook.maf.outputpath" type="string"/>
-      <preference id="multitoone" name="scrapbook.maf.multitoone" type="bool"/>
+      <preference id="outputpath" name="extensions.scrapbook.maf.outputpath" type="string"/>
+      <preference id="multitoone" name="extensions.scrapbook.maf.multitoone" type="bool"/>
     </preferences>
     <groupbox>
       <caption label="&group.paths;"/>

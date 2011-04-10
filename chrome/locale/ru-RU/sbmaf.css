@@ -63,6 +63,8 @@ div.centre{text-align:center}
 .bold{font-weight: bold}
 .small{font-size:8px;}
 .important{font-weight: bold; color: red;}
+.reminder{padding-top: 40px; font-size: 12px;}
+.credits{float: left; width: 150px;}
 
 a:link {text-decoration: none}
 a:visited {text-decoration: none}

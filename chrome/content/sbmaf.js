@@ -93,8 +93,8 @@ var sbMafService = {
 
 
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-    var bMulti = prefs.getBoolPref("scrapbook.maf.multitoone");
-    var pathOutput = prefs.getCharPref("scrapbook.maf.outputpath");
+    var bMulti = prefs.getBoolPref("extensions.scrapbook.maf.multitoone");
+    var pathOutput = prefs.getCharPref("extensions.scrapbook.maf.outputpath");
     
     // If user output path not set, prompt.
     if(pathOutput == ""){
@@ -300,8 +300,107 @@ var sbMafService = {
 	
 };
 
-	
 
+// Update prefs on first load.
+var PrefsMAF = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+var oldPrefsMAF = PrefsMAF.getBranch("scrapbook.maf.");
+var newPrefsMAF = PrefsMAF.getBranch("extensions.scrapbook.maf.");
+
+
+var OverlayMAF = {
+  init: function(){
+    var ver = -1, firstrun = true;
+    var current;
+
+    //gets the version number.
+    try {
+      // Firefox 4 and later; Mozilla 2 and later
+      Components.utils.import("resource://gre/modules/AddonManager.jsm");
+      AddonManager.getAddonByID("{1544D611-955F-4ceb-95D3-82C720C29EAE}", function(addon) {
+      current = addon.version;
+      });
+    } catch (ex) {
+      // Firefox 3.6 and before; Mozilla 1.9.2 and before
+      var em = Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces.nsIExtensionManager);
+      var addon = em.getItemForID("{1544D611-955F-4ceb-95D3-82C720C29EAE}");
+      current = addon.version;
+    }
+		
+    try{
+    	ver = newPrefsMAF.getCharPref("version");
+    	firstrun = newPrefsMAF.getBoolPref("firstrun");
+    }catch(e){
+      //nothing
+    }finally{
+      if (firstrun){
+        newPrefsMAF.setBoolPref("firstrun",false);
+        newPrefsMAF.setCharPref("version",current);
+
+        // Insert code for first run here        
+
+        // The example below loads a page by opening a new tab.
+        // Useful for loading a mini tutorial
+//         window.setTimeout(function(){
+//           window.opener.getBrowser.selectedTab = window.opener.gBrowser.addTab("about:mozilla");
+//         }, 1500); //Firefox 2 fix - or else tab will get closed
+				
+      }		
+
+      if (ver!=current && !firstrun){ // !firstrun ensures that this section does not get loaded if its a first run.
+        newPrefsMAF.setCharPref("version",current);
+
+        // Insert code if version is different here => upgrade
+        var cnt = {};
+        var list = new Array();
+        list = oldPrefsMAF.getChildList("", cnt);
+        
+        // If old prefs exist, convert and delete them.
+        if(cnt.value > 0){
+          for(var i in list)
+          {
+            var type = oldPrefsMAF.getPrefType(list[i]);
+            // Only convert prefs that have user values.
+            if(oldPrefsMAF.prefHasUserValue(list[i])) {
+              if(type == Components.interfaces.nsIPrefBranch.PREF_STRING){
+                newPrefsMAF.setCharPref(list[i], oldPrefsMAF.getCharPref(list[i]));
+              }
+              if(type == Components.interfaces.nsIPrefBranch.PREF_INT){
+                newPrefsMAF.setIntPref(list[i], oldPrefsMAF.getIntPref(list[i]));
+              }
+              if(type == Components.interfaces.nsIPrefBranch.PREF_BOOL){
+                newPrefsMAF.setBoolPref(list[i], oldPrefsMAF.getBoolPref(list[i]));
+              }
+            }
+          }
+          //Delete old prefs.
+          oldPrefsMAF.deleteBranch("");
+          PrefsMAF.savePrefFile(null);
+        }
+      }
+      
+      // The example below loads a page by opening a new tab.
+      // Useful for loading a mini tutorial
+//       window.setTimeout(function(){
+//         gBrowser.selectedTab = gBrowser.addTab("about:mozilla");
+//       }, 1500); //Firefox 2 fix - or else tab will get closed
+      // Open the help on first run or upgrade.
+      if (firstrun || ver != current){
+        var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                               .getInterface(Components.interfaces.nsIWebNavigation)
+                               .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+                               .rootTreeItem
+                               .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                               .getInterface(Components.interfaces.nsIDOMWindow);
+        
+        mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+      }
+    }
+    window.removeEventListener("load", OverlayMAF.init, true);
+  }
+};
+
+
+window.addEventListener("load", OverlayMAF.init, true);
 
 
 

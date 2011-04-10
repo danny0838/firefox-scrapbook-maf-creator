@@ -1,4 +1,3 @@
-
 overlay chrome://scrapbook/content/scrapbook.xul	chrome://sbmaf/content/scrapbookOverlay.xul
 overlay	chrome://scrapbook/content/tree.xul	chrome://sbmaf/content/treeOverlay.xul
 

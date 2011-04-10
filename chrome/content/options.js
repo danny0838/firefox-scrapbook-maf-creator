@@ -63,7 +63,11 @@
   
   function onClickHelp()
   {
-    sbCommonUtils.loadURL("chrome://sbmaf/locale/sbmaf.html", true);
+    // Add tab, then make active
+    var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
+    var mainWindow = wm.getMostRecentWindow("navigator:browser");
+    mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+
     this.close();
   }
   

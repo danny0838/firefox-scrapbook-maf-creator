@@ -1,3 +1,3 @@
-pref("scrapbook.maf.outputpath", "");
-pref("scrapbook.maf.multitoone", true);
+pref("extensions.scrapbook.maf.outputpath", "");
+pref("extensions.scrapbook.maf.multitoone", true);
 
