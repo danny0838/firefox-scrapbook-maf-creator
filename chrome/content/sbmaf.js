@@ -58,6 +58,9 @@ var sbMafService = {
 	zipW : null,
 
 	strings : null,
+  oSBTree : null,
+  oSBData : null,
+  oSBUtils : null,
 	
 	exec : function()
 	{
@@ -65,23 +68,37 @@ var sbMafService = {
     var strbundle = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
     this.strings = strbundle.createBundle("chrome://sbmaf/locale/overlay.properties"); 
 
-		if(!("sbTreeHandler" in window) || !("flattenResources" in sbDataSource))
-		{
+    // Support SB and SB+.
+    // API changes in SB 1.4.0 and again in 1.4.7 broke this extension. The same changes weren't made in SB+
+    // NOTE: ScrapBookUtils and ScrapBookData are now in the "modules" directory, not in the .jar.
+    if (typeof(sbTreeUI) == "object"){
+      // SB 1.4.0 or later.
+      this.oSBTree = sbTreeUI;
+      this.oSBData = ScrapBookData;
+      this.oSBUtils = ScrapBookUtils;
+    }
+    else if (typeof(sbTreeHandler) == "object"){
+      // SB < 1.4.0 or SB+.
+      this.oSBTree = sbTreeHandler;
+      this.oSBData = sbDataSource;
+      this.oSBUtils = sbCommonUtils;
+    }
+    else{
       var sbVersion = this.strings.GetStringFromName("sbVersion");
 			return alert(sbVersion);
 		}
 		// Get selected entry.
     var selectEntry = this.strings.GetStringFromName("selectEntry");
-		aRes = sbController.isTreeContext ? sbTreeHandler.resource : sbListHandler.resource;
+		var aRes = this.oSBTree.resource ? this.oSBTree.resource : (sbController.isTreeContext ? sbTreeHandler.resource : sbListHandler.resource);
     if(aRes === null){
       alert(selectEntry);
       return false;
     }
 
-		this.entryTitle = (sbDataSource.getProperty(aRes, "title"));
+		this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
 
-    var id = sbDataSource.getProperty(aRes, "id");
-    this.contentDir = sbCommonUtils.getContentDir(id, true);
+    var id = this.oSBData.getProperty(aRes, "id");
+    this.contentDir = this.oSBUtils.getContentDir(id, true);
 
 		// Get datetime.
     id.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/);
@@ -102,9 +119,9 @@ var sbMafService = {
       alert(errorPathEmpty);
       return false;
     }
-    if(!sbDataSource.isContainer(aRes)){
+    if(!this.oSBData.isContainer(aRes)){
       // Create the MAF.
-    	if(!this.IsNewFileOrCanOverwrite(pathOutput, sbCommonUtils.validateFileName(this.entryTitle + ".maff"))){
+    	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
         return false;
     	}
       // An exception returned here from handleError() aborts the script.
@@ -143,7 +160,7 @@ var sbMafService = {
     txtContent += "         xmlns:NC=\"http://home.netscape.com/NC-rdf#\"\n";
     txtContent += "         xmlns:RDF=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n";
     txtContent += "  <RDF:Description RDF:about=\"urn:root\">\n";
-    txtContent += "    <MAF:originalurl RDF:resource=\"" + sbDataSource.getProperty(aRes, "source") + "\"/>\n";
+    txtContent += "    <MAF:originalurl RDF:resource=\"" + this.oSBData.getProperty(aRes, "source") + "\"/>\n";
     txtContent += "    <MAF:title RDF:resource=\"" + this.entryTitle + "\"/>\n";
     txtContent += "    <MAF:archivetime RDF:resource=\"" + this.dateTime + "\"/>\n";
     txtContent += "    <MAF:indexfilename RDF:resource=\"index.html\"/>\n";
@@ -154,7 +171,7 @@ var sbMafService = {
 		this.fileRDF = this.contentDir.clone();
 		this.fileRDF.append("index.rdf");
 
-    sbCommonUtils.writeFile(this.fileRDF, txtContent, "UTF-8");
+    this.oSBUtils.writeFile(this.fileRDF, txtContent, "UTF-8");
   },
 	
 	CreateZip : function(pathOutput)
@@ -164,7 +181,7 @@ var sbMafService = {
     
     var zipFile = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
     zipFile.initWithPath(pathOutput);
-    zipFile.append(sbCommonUtils.validateFileName(this.entryTitle) + ".maff");
+    zipFile.append(this.oSBUtils.validateFileName(this.entryTitle) + ".maff");
     
     this.zipW.open(zipFile, this.PR_RDWR | this.PR_CREATE_FILE | this.PR_TRUNCATE);
   },
@@ -211,34 +228,42 @@ var sbMafService = {
 	{
     var alertLabel = this.strings.GetStringFromName("alertLabel");
     var alertMessage = this.strings.GetStringFromName("alertMessage");
-    alerts = Components.classes["@mozilla.org/alerts-service;1"].getService(Components.interfaces.nsIAlertsService);
+    var alerts = Components.classes["@mozilla.org/alerts-service;1"].getService(Components.interfaces.nsIAlertsService);
     alerts.showAlertNotification("chrome://sbmaf/content/sbmaf.png", alertLabel, alertMessage, false, "", null);
   },
 
-	processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive)
+	processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
 	{
-    sbCommonUtils.RDFC.Init(sbDataSource.data, aRes);
-		var resEnum = sbCommonUtils.RDFC.GetElements();
+    if (typeof(sbTreeUI) == "object"){
+      // SB 1.4.7 API changes.
+      this.oSBUtils.RDFC.Init(this.oSBData._dataSource, aRes);
+    }
+    else{
+      // SB prior to 1.4.7 and SB+.
+      this.oSBUtils.RDFC.Init(this.oSBData.data, aRes);
+    }
+		var resEnum = this.oSBUtils.RDFC.GetElements();
 
-    this.entryTitle = (sbDataSource.getProperty(aRes, "title"));
+    this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
     try{
       // Store multiple stored sites in one archive.
-      if(bMulti){
+      // Prevent zip writing during recursion.
+      if(bMulti && typeof(bRecurring) == 'undefined'){
         this.CreateZip(pathOutput);
       }
   		while ( resEnum.hasMoreElements() )
   		{
   			var res = resEnum.getNext();
-  			if ( sbDataSource.isContainer(res) ) {
+  			if ( this.oSBData.isContainer(res) ) {
   				if ( aRecursive ){
-            this.processFolderRecursively(res, aRecursive);
+            this.processFolderRecursively(res, pathOutput, bMulti, aRecursive, true);
           }
   			} else {
-          this.entryTitle = (sbDataSource.getProperty(res, "title"));
-          var id = sbDataSource.getProperty(res, "id");
-          this.contentDir = sbCommonUtils.getContentDir(id, true);
+          this.entryTitle = (this.oSBData.getProperty(res, "title"));
+          var id = this.oSBData.getProperty(res, "id");
+          this.contentDir = this.oSBUtils.getContentDir(id, true);
   
-        	if(!this.IsNewFileOrCanOverwrite(pathOutput, sbCommonUtils.validateFileName(this.entryTitle + ".maff"))){
+        	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
             continue;
         	}
 
@@ -260,7 +285,8 @@ var sbMafService = {
   			}
   		}
       // Store multiple stored sites in one archive.
-      if(bMulti){
+      // Prevent zip writing during recursion.
+      if(bMulti && typeof(bRecurring) == 'undefined'){
         this.CloseZip();
       }
     }catch(e){
@@ -274,7 +300,7 @@ var sbMafService = {
     var errorText1 = this.strings.GetStringFromName("errorText1");
     var errorText2 = this.strings.GetStringFromName("errorText2");
     var errorText3 = this.strings.GetStringFromName("errorText3");
-    txt = errorText1 + e.name + ".\n\n";
+    var txt = errorText1 + e.name + ".\n\n";
     txt += errorText2 + "\n" + e.message + "\n\n";
     txt += errorText3 + "\n\n";
     alert(txt);
@@ -300,32 +326,33 @@ var sbMafService = {
 	
 };
 
-
-// Update prefs on first load.
-var PrefsMAF = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-var oldPrefsMAF = PrefsMAF.getBranch("scrapbook.maf.");
-var newPrefsMAF = PrefsMAF.getBranch("extensions.scrapbook.maf.");
-
-
 var OverlayMAF = {
-  init: function(){
-    var ver = -1, firstrun = true;
-    var current;
+  // Update prefs on first load.
 
+  init : function(){
     //gets the version number.
     try {
       // Firefox 4 and later; Mozilla 2 and later
       Components.utils.import("resource://gre/modules/AddonManager.jsm");
       AddonManager.getAddonByID("{1544D611-955F-4ceb-95D3-82C720C29EAE}", function(addon) {
-      current = addon.version;
+        OverlayMAF.init2(addon.version);
       });
     } catch (ex) {
       // Firefox 3.6 and before; Mozilla 1.9.2 and before
       var em = Components.classes["@mozilla.org/extensions/manager;1"].getService(Components.interfaces.nsIExtensionManager);
       var addon = em.getItemForID("{1544D611-955F-4ceb-95D3-82C720C29EAE}");
-      current = addon.version;
+        OverlayMAF.init2(addon.version);
     }
-		
+  },
+
+  init2 : function(current){
+    var ver = -1;
+    var firstrun = false;
+    var PrefsMAF = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+    var oldPrefsMAF = PrefsMAF.getBranch("scrapbook.maf.");
+    var newPrefsMAF = PrefsMAF.getBranch("extensions.scrapbook.maf.");
+
+
     try{
     	ver = newPrefsMAF.getCharPref("version");
     	firstrun = newPrefsMAF.getBoolPref("firstrun");
@@ -335,15 +362,6 @@ var OverlayMAF = {
       if (firstrun){
         newPrefsMAF.setBoolPref("firstrun",false);
         newPrefsMAF.setCharPref("version",current);
-
-        // Insert code for first run here        
-
-        // The example below loads a page by opening a new tab.
-        // Useful for loading a mini tutorial
-//         window.setTimeout(function(){
-//           window.opener.getBrowser.selectedTab = window.opener.gBrowser.addTab("about:mozilla");
-//         }, 1500); //Firefox 2 fix - or else tab will get closed
-				
       }		
 
       if (ver!=current && !firstrun){ // !firstrun ensures that this section does not get loaded if its a first run.
@@ -378,11 +396,6 @@ var OverlayMAF = {
         }
       }
       
-      // The example below loads a page by opening a new tab.
-      // Useful for loading a mini tutorial
-//       window.setTimeout(function(){
-//         gBrowser.selectedTab = gBrowser.addTab("about:mozilla");
-//       }, 1500); //Firefox 2 fix - or else tab will get closed
       // Open the help on first run or upgrade.
       if (firstrun || ver != current){
         var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
@@ -392,7 +405,7 @@ var OverlayMAF = {
                                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
                                .getInterface(Components.interfaces.nsIDOMWindow);
         
-        mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
       }
     }
     window.removeEventListener("load", OverlayMAF.init, true);
