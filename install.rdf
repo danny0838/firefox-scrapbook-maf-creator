@@ -28,28 +28,6 @@
   	<em:contributor>Gomita</em:contributor>
     <em:translator>ru-RU: Aganel (aganel@gmail.com)</em:translator>
     <em:translator>zh-CN: 天涯倦客 (http://t.qq.com/HeartBlade)</em:translator>
-    
-		<em:localized>
-			<Description>
-				<em:locale>en-US</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
-		<em:localized>
-			<Description>
-				<em:locale>ru-RU</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
-		<em:localized>
-			<Description>
-				<em:locale>zh-CN</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
    
   </Description>      
 </RDF>
