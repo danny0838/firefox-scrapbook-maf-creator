@@ -310,9 +310,7 @@ var sbMafService = {
     fileOutput.initWithPath(pathOutput); 
     fileOutput.append(fileName);
     if(fileOutput.exists()){
-      var promptOverwrite1 = this.strings.GetStringFromName("promptOverwrite1");
-      var promptOverwrite2 = this.strings.GetStringFromName("promptOverwrite2");
-      if(!confirm(fileOutput.path + "\n" + promptOverwrite1 + "\n\n" + promptOverwrite2)){
+      if(!confirm(this.strings.formatStringFromName("promptOverwrite", [fileOutput.path], 1))){
         return false;
       }
     }
