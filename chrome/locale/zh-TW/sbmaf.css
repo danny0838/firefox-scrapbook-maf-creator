@@ -1,0 +1,114 @@
+/* CSS Document */
+#container
+{
+width: 90%;
+margin: 10px auto;
+background-color: #fff;
+color: #333;
+border: 1px solid gray;
+line-height: 130%;
+}
+
+#top
+{
+padding: .5em;
+/* lightblue */
+background-color: #add8e6;
+border-bottom: 1px solid gray;
+}
+
+#top h1
+{
+padding: 0;
+margin: 0;
+text-shadow: black 0.1em 0.1em 0.2em;
+}
+
+#leftnav
+{
+float: left;
+width: 160px;
+margin: 0;
+padding: 1em;
+/* Shift the menu left */
+padding-left: 0em;
+}
+
+#content
+{
+margin-left: 200px;
+border-left: 1px solid gray;
+padding: 1em;
+max-width: 50em;
+font: normal 14px "Lucida Grande", "Lucida Sans Unicode", verdana, lucida, sans-serif;
+}
+
+#footer
+{
+clear: both;
+margin: 0;
+padding: .5em;
+color: #333;
+background-color: #add8e6;
+border-top: 1px solid gray;
+}
+
+#leftnav p { margin: 0 0 1em 0; }
+#content h2 { margin: 0 0 .5em 0; }
+
+h1{color:#ff9933;}
+h2{color:#add8e6}
+h3{color:#3366cc;}
+img.middle{vertical-align:middle}
+div.centre{text-align:center}
+.bold{font-weight: bold}
+.small{font-size:8px;}
+.important{font-weight: bold; color: red;}
+.reminder{padding-top: 40px; font-size: 12px;}
+.credits{float: left; width: 150px;}
+
+a:link {text-decoration: none}
+a:visited {text-decoration: none}
+a:active {text-decoration: none}
+a:hover {text-decoration: none; color: red;}
+
+/* List styles */
+#navcontainer ul
+{
+list-style-type: none;
+text-align: left;
+}
+
+#navcontainer ul li a
+{
+background: transparent url(chrome://sbmaf/content/help/list-off.gif) left center no-repeat;
+padding-left: 15px;
+text-align: left;
+font: normal 16px "Lucida Grande", "Lucida Sans Unicode", verdana, lucida, sans-serif;
+text-decoration: none;
+color: #999;
+}
+
+#navcontainer ul li a:hover
+{
+background: transparent url(chrome://sbmaf/content/help/list-on-mediumvioletred.gif) left center no-repeat;
+/* mediumvioletred */
+color: #c71585;
+}
+
+#navcontainer ul li a#current
+{
+background: transparent url(chrome://sbmaf/content/help/list-active-red.gif) left center no-repeat;
+color: red;
+}
+
+/* Static, unlinked list item */
+#navcontainer ul li#static
+{
+padding-left: 15px;
+text-align: left;
+font: normal 14px "Lucida Grande", "Lucida Sans Unicode", verdana, lucida, sans-serif;
+text-decoration: none;
+color: #999;
+}
+
