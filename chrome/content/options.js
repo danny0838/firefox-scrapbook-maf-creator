@@ -86,8 +86,7 @@
       var fileOutput = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
       fileOutput.initWithPath(pathOutput.value);
       if(!fileOutput.exists()){
-        var errorPathInvalid = this.strings.GetStringFromName("errorPathInvalid");
-        alert(pathOutput.value + "\n\n" + errorPathInvalid);
+        alert(this.strings.formatStringFromName("errorPathInvalid", [pathOutput.value], 1));
         ret = false;
       }
     }
