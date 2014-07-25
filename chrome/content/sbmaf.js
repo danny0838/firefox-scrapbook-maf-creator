@@ -298,13 +298,7 @@ var sbMafService = {
 
  	HandleError : function(e)
 	{
-    var errorText1 = this.strings.GetStringFromName("errorText1");
-    var errorText2 = this.strings.GetStringFromName("errorText2");
-    var errorText3 = this.strings.GetStringFromName("errorText3");
-    var txt = errorText1 + e.name + ".\n\n";
-    txt += errorText2 + "\n" + e.message + "\n\n";
-    txt += errorText3 + "\n\n";
-    alert(txt);
+    alert(this.strings.formatStringFromName("errorText", [e.name, e.message], 2));
     // Abort the script.
     throw "stop";
 	},
