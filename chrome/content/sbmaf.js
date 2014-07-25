@@ -119,6 +119,7 @@ var sbMafService = {
       alert(errorPathEmpty);
       return false;
     }
+	pathOutput = this.oSBUtils.convertToUnicode(pathOutput, "UTF-8");
     if(!this.oSBData.isContainer(aRes)){
       // Create the MAF.
     	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
