@@ -362,7 +362,7 @@ var OverlayMAF = {
                                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
                                .getInterface(Components.interfaces.nsIDOMWindow);
         
-        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("https://github.com/danny0838/firefox-scrapbook-maf-creator/wiki");
       }
     }
     window.removeEventListener("load", OverlayMAF.init, true);

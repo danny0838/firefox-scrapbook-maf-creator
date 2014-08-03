@@ -29,7 +29,7 @@
     // Add tab, then make active
     var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator);
     var mainWindow = wm.getMostRecentWindow("navigator:browser");
-    mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+    mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("https://github.com/danny0838/firefox-scrapbook-maf-creator/wiki");
 
     this.close();
   }
