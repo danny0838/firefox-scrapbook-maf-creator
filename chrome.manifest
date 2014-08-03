@@ -6,4 +6,5 @@ content	sbmaf	chrome/content/
 locale	sbmaf	en-US	chrome/locale/en-US/
 locale	sbmaf	ru-RU	chrome/locale/ru-RU/
 locale	sbmaf	zh-CN	chrome/locale/zh-CN/
+locale	sbmaf	zh-TW	chrome/locale/zh-TW/
 

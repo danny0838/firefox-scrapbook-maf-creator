@@ -1,39 +1,3 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1/GPL 2.0/LGPL 2.1
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Original Code is ScrapBook MAF Creator.
- *
- * The Initial Developer of the Original Code is Gary Harris.
- * Portions created by the Initial Developer are Copyright (C) 2009
- * the Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *     Gomita <gomita@xuldev.org> (the author of Scrapbook)
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 2 or later (the "GPL"), or
- * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
- * in which case the provisions of the GPL or the LGPL are applicable instead
- * of those above. If you wish to allow use of your version of this file only
- * under the terms of either the GPL or the LGPL, and not to allow others to
- * use your version of this file under the terms of the MPL, indicate your
- * decision by deleting the provisions above and replace them with the notice
- * and other provisions required by the GPL or the LGPL. If you do not delete
- * the provisions above, a recipient may use your version of this file under
- * the terms of any one of the MPL, the GPL or the LGPL.
- *
- * ***** END LICENSE BLOCK ***** */
-
 // TODO: behaviour for notes and bookmarks
 // TODO: use getType to exclude notes and bookmarks.
 // TODO: check for presence of scrapbook and version?
@@ -119,6 +83,7 @@ var sbMafService = {
       alert(errorPathEmpty);
       return false;
     }
+	pathOutput = this.oSBUtils.convertToUnicode(pathOutput, "UTF-8");
     if(!this.oSBData.isContainer(aRes)){
       // Create the MAF.
     	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
@@ -297,13 +262,7 @@ var sbMafService = {
 
  	HandleError : function(e)
 	{
-    var errorText1 = this.strings.GetStringFromName("errorText1");
-    var errorText2 = this.strings.GetStringFromName("errorText2");
-    var errorText3 = this.strings.GetStringFromName("errorText3");
-    var txt = errorText1 + e.name + ".\n\n";
-    txt += errorText2 + "\n" + e.message + "\n\n";
-    txt += errorText3 + "\n\n";
-    alert(txt);
+    alert(this.strings.formatStringFromName("errorText", [e.name, e.message], 2));
     // Abort the script.
     throw "stop";
 	},
@@ -315,9 +274,7 @@ var sbMafService = {
     fileOutput.initWithPath(pathOutput); 
     fileOutput.append(fileName);
     if(fileOutput.exists()){
-      var promptOverwrite1 = this.strings.GetStringFromName("promptOverwrite1");
-      var promptOverwrite2 = this.strings.GetStringFromName("promptOverwrite2");
-      if(!confirm(fileOutput.path + "\n" + promptOverwrite1 + "\n\n" + promptOverwrite2)){
+      if(!confirm(this.strings.formatStringFromName("promptOverwrite", [fileOutput.path], 1))){
         return false;
       }
     }
@@ -405,7 +362,7 @@ var OverlayMAF = {
                                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
                                .getInterface(Components.interfaces.nsIDOMWindow);
         
-        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("chrome://sbmaf/locale/sbmaf.html");
+        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab("https://github.com/danny0838/firefox-scrapbook-maf-creator/wiki");
       }
     }
     window.removeEventListener("load", OverlayMAF.init, true);

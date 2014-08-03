@@ -1,0 +1,10 @@
+<!ENTITY prefwindow.title "Scrapbook MAF 製造器選項">
+<!ENTITY pane1.title "一般">
+<!ENTITY group.paths "選項">
+<!ENTITY multitoone.label "將多筆資料儲存在一個檔案中">
+<!ENTITY multitoone.accesskey "S">
+<!ENTITY outputpathpref.label "輸出路徑">
+<!ENTITY outputpathbrowse.label "瀏覽...">
+<!ENTITY outputpathbrowse.accesskey "B">
+<!ENTITY help.label "協助">
+<!ENTITY help.accesskey "H">

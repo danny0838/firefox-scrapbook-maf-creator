@@ -4,8 +4,8 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
   <Description about="urn:mozilla:install-manifest">
-    <em:id>{1544D611-955F-4ceb-95D3-82C720C29EAE}</em:id>
-    <em:version>1.1.4</em:version>
+    <em:id>scrapbook.maf.creator.x@addons.mozilla.org</em:id>
+    <em:version>1.1.5</em:version>
     <em:type>2</em:type>
    
     <!-- Target Application this extension can install into, 
@@ -14,42 +14,21 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>14.*</em:maxVersion>
+        <em:maxVersion>32.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 	
     <!-- Front End MetaData -->
     <em:optionsURL>chrome://sbmaf/content/options.xul</em:optionsURL>
     <em:iconURL>chrome://sbmaf/content/sbmaf.png</em:iconURL>
-    <em:name>ScrapBook MAF Creator</em:name>
-    <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-    <em:homepageURL>http://cryogen.66ghz.com/index.php/mafcreator</em:homepageURL>
-    <em:creator>Gary Harris</em:creator>
+    <em:name>ScrapBook MAF Creator X</em:name>
+    <em:description>Mozilla Archive Format creator for Firefox Scrapbook extension.</em:description>
+    <em:homepageURL>https://github.com/danny0838/firefox-scrapbook-maf-creator</em:homepageURL>
+    <em:creator>Danny Lin</em:creator>
+    <em:developer>Gary Harris</em:developer>
   	<em:contributor>Gomita</em:contributor>
     <em:translator>ru-RU: Aganel (aganel@gmail.com)</em:translator>
     <em:translator>zh-CN: 天涯倦客 (http://t.qq.com/HeartBlade)</em:translator>
-    
-		<em:localized>
-			<Description>
-				<em:locale>en-US</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
-		<em:localized>
-			<Description>
-				<em:locale>ru-RU</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
-		<em:localized>
-			<Description>
-				<em:locale>zh-CN</em:locale>
-        <em:name>ScrapBook MAF Creator</em:name>
-        <em:description>Mozilla Archive Format creator for the Scrapbook extension.</em:description>
-			</Description>
-		</em:localized>    
    
   </Description>      
 </RDF>
