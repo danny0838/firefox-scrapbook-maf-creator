@@ -1,4 +1,4 @@
-Firefox plugin ScrapBook MAF creator X is an open project based on ScrapBook MAF creator.
+Firefox plugin ScrapBook X MAF creator is an open project based on ScrapBook MAF creator.
 
 See also:
 

@@ -21,7 +21,7 @@
     <!-- Front End MetaData -->
     <em:optionsURL>chrome://sbmaf/content/options.xul</em:optionsURL>
     <em:iconURL>chrome://sbmaf/content/sbmaf.png</em:iconURL>
-    <em:name>ScrapBook MAF Creator X</em:name>
+    <em:name>ScrapBook X MAF Creator</em:name>
     <em:description>Mozilla Archive Format creator for Firefox Scrapbook extension.</em:description>
     <em:homepageURL>https://github.com/danny0838/firefox-scrapbook-maf-creator</em:homepageURL>
     <em:creator>Danny Lin</em:creator>
