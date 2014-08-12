@@ -1,0 +1,21 @@
+ScrapBook X MAF Creator 1.1.7
+----------------
+
+- UPDATE: Move RELEASE.txt to the version pack.
+
+
+ScrapBook X MAF Creator 1.1.6
+----------------
+
+- UPDATE: Modify addon id and name to "ScrapBook X MAF Creator" for consistency.
+- FIXED: README.txt was not included in the pack.
+
+
+ScrapBook X MAF Creator 1.1.5
+----------------
+
+- COMPATIBLE WITH: <u>ScrapBook X 1.12.0a20</u>, <u>ScrapBook Plus 1.9.24.40b3</u>, and <u>ScrapBook 1.5.9</u>.
+- UPDATE: Moved help documentation to the online wiki.
+- UPDATE: Added zh-tw localization.
+- UPDATE: Internal code optomization.
+- FIXED: An error occurs if the selected output path contains non-ASCII chars.
