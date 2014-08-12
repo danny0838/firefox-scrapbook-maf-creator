@@ -193,6 +193,7 @@ var sbMafService = {
                     this.entryTitle = (sbMafData.getProperty(res, "title"));
                     var id = sbMafData.getProperty(res, "id");
                     this.contentDir = sbMafCommon.getContentDir(id, true);
+                    if (!this.contentDir) continue;
       
                     if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
                         continue;
