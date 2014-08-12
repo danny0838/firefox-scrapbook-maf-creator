@@ -179,6 +179,9 @@ var sbMafService = {
             // Store multiple stored sites in one archive.
             // Prevent zip writing during recursion.
             if(bMulti && typeof(bRecurring) == 'undefined'){
+                if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
+                    return;
+                }
                 this.CreateZip(pathOutput);
             }
             while ( resEnum.hasMoreElements() )
@@ -194,14 +197,13 @@ var sbMafService = {
                     var id = sbMafData.getProperty(res, "id");
                     this.contentDir = sbMafCommon.getContentDir(id, true);
                     if (!this.contentDir) continue;
-      
-                    if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
-                        continue;
-                    }
 
                     // Create the MAF.
                     // Store each stored site in it's own archive.
                     if(!bMulti){
+                        if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
+                            continue;
+                        }
                         this.CreateZip(pathOutput);
                     }
 
