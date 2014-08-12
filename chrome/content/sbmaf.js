@@ -14,20 +14,20 @@ var sbMafService = {
   PR_SYNC        : 0x40,
   PR_EXCL        : 0x80,
 
-	entryTitle : "",
-	contentDir : null,
-	resource : null,
-	fileRDF : null,
-	dateTime : null,
-	zipW : null,
+    entryTitle : "",
+    contentDir : null,
+    resource : null,
+    fileRDF : null,
+    dateTime : null,
+    zipW : null,
 
-	strings : null,
+    strings : null,
   oSBTree : null,
   oSBData : null,
   oSBUtils : null,
-	
-	exec : function()
-	{
+    
+    exec : function()
+    {
     // Get property strings.
     var strbundle = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
     this.strings = strbundle.createBundle("chrome://sbmaf/locale/overlay.properties"); 
@@ -49,28 +49,28 @@ var sbMafService = {
     }
     else{
       var sbVersion = this.strings.GetStringFromName("sbVersion");
-			return alert(sbVersion);
-		}
-		// Get selected entry.
+            return alert(sbVersion);
+        }
+        // Get selected entry.
     var selectEntry = this.strings.GetStringFromName("selectEntry");
-		var aRes = this.oSBTree.resource ? this.oSBTree.resource : (sbController.isTreeContext ? sbTreeHandler.resource : sbListHandler.resource);
+        var aRes = this.oSBTree.resource ? this.oSBTree.resource : (sbController.isTreeContext ? sbTreeHandler.resource : sbListHandler.resource);
     if(aRes === null){
       alert(selectEntry);
       return false;
     }
 
-		this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
+        this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
 
     var id = this.oSBData.getProperty(aRes, "id");
     this.contentDir = this.oSBUtils.getContentDir(id, true);
 
-		// Get datetime.
+        // Get datetime.
     id.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/);
-		var dd = new Date(
-			parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10) - 1, parseInt(RegExp.$3, 10),
-			parseInt(RegExp.$4, 10), parseInt(RegExp.$5, 10), parseInt(RegExp.$6, 10)
-		);
-		this.dateTime = dd;
+        var dd = new Date(
+            parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10) - 1, parseInt(RegExp.$3, 10),
+            parseInt(RegExp.$4, 10), parseInt(RegExp.$5, 10), parseInt(RegExp.$6, 10)
+        );
+        this.dateTime = dd;
 
 
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
@@ -83,12 +83,12 @@ var sbMafService = {
       alert(errorPathEmpty);
       return false;
     }
-	pathOutput = this.oSBUtils.convertToUnicode(pathOutput, "UTF-8");
+    pathOutput = this.oSBUtils.convertToUnicode(pathOutput, "UTF-8");
     if(!this.oSBData.isContainer(aRes)){
       // Create the MAF.
-    	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
+        if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
         return false;
-    	}
+        }
       // An exception returned here from handleError() aborts the script.
       try{
         try{
@@ -115,10 +115,10 @@ var sbMafService = {
     }
     
     return true;
-	},
-	
-	CreateRDF : function(aRes)
-	{
+    },
+    
+    CreateRDF : function(aRes)
+    {
     var txtContent = "";
     txtContent += "<?xml version=\"1.0\"?>\n";
     txtContent += "<RDF:RDF xmlns:MAF=\"http://maf.mozdev.org/metadata/rdf#\"\n";
@@ -133,14 +133,14 @@ var sbMafService = {
     txtContent += "  </RDF:Description>\n";
     txtContent += "</RDF:RDF>\n";
     
-		this.fileRDF = this.contentDir.clone();
-		this.fileRDF.append("index.rdf");
+        this.fileRDF = this.contentDir.clone();
+        this.fileRDF.append("index.rdf");
 
     this.oSBUtils.writeFile(this.fileRDF, txtContent, "UTF-8");
   },
-	
-	CreateZip : function(pathOutput)
-	{
+    
+    CreateZip : function(pathOutput)
+    {
     var zipWriter = Components.Constructor("@mozilla.org/zipwriter;1", "nsIZipWriter");
     this.zipW = new zipWriter();
     
@@ -151,11 +151,11 @@ var sbMafService = {
     this.zipW.open(zipFile, this.PR_RDWR | this.PR_CREATE_FILE | this.PR_TRUNCATE);
   },
 
-	CloseZip : function()
-	{
+    CloseZip : function()
+    {
       this.zipW.close();
-	},
-	
+    },
+    
   ZipEntry : function()
   {
       this.zipW.addEntryDirectory(this.contentDir.leafName, 0, false);
@@ -189,16 +189,16 @@ var sbMafService = {
     }
   },
 
-	ReportCompletion : function()
-	{
+    ReportCompletion : function()
+    {
     var alertLabel = this.strings.GetStringFromName("alertLabel");
     var alertMessage = this.strings.GetStringFromName("alertMessage");
     var alerts = Components.classes["@mozilla.org/alerts-service;1"].getService(Components.interfaces.nsIAlertsService);
     alerts.showAlertNotification("chrome://sbmaf/content/sbmaf.png", alertLabel, alertMessage, false, "", null);
   },
 
-	processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
-	{
+    processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
+    {
     if (typeof(sbTreeUI) == "object"){
       // SB 1.4.7 API changes.
       this.oSBUtils.RDFC.Init(this.oSBData._dataSource, aRes);
@@ -207,7 +207,7 @@ var sbMafService = {
       // SB prior to 1.4.7 and SB+.
       this.oSBUtils.RDFC.Init(this.oSBData.data, aRes);
     }
-		var resEnum = this.oSBUtils.RDFC.GetElements();
+        var resEnum = this.oSBUtils.RDFC.GetElements();
 
     this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
     try{
@@ -216,21 +216,21 @@ var sbMafService = {
       if(bMulti && typeof(bRecurring) == 'undefined'){
         this.CreateZip(pathOutput);
       }
-  		while ( resEnum.hasMoreElements() )
-  		{
-  			var res = resEnum.getNext();
-  			if ( this.oSBData.isContainer(res) ) {
-  				if ( aRecursive ){
+          while ( resEnum.hasMoreElements() )
+          {
+              var res = resEnum.getNext();
+              if ( this.oSBData.isContainer(res) ) {
+                  if ( aRecursive ){
             this.processFolderRecursively(res, pathOutput, bMulti, aRecursive, true);
           }
-  			} else {
+              } else {
           this.entryTitle = (this.oSBData.getProperty(res, "title"));
           var id = this.oSBData.getProperty(res, "id");
           this.contentDir = this.oSBUtils.getContentDir(id, true);
   
-        	if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
+            if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
             continue;
-        	}
+            }
 
           // Create the MAF.
           // Store each stored site in it's own archive.
@@ -247,8 +247,8 @@ var sbMafService = {
           }
         
           this.PostProcess();
-  			}
-  		}
+              }
+          }
       // Store multiple stored sites in one archive.
       // Prevent zip writing during recursion.
       if(bMulti && typeof(bRecurring) == 'undefined'){
@@ -258,19 +258,19 @@ var sbMafService = {
       this.HandleError(e);
     }
     this.ReportCompletion();
-	},
+    },
 
- 	HandleError : function(e)
-	{
+     HandleError : function(e)
+    {
     alert(this.strings.formatStringFromName("errorText", [e.name, e.message], 2));
     // Abort the script.
     throw "stop";
-	},
-	
+    },
+    
   // Check if the file already exists and, if so, whether to overwrite.
-	IsNewFileOrCanOverwrite : function(pathOutput, fileName)
-	{
-		var fileOutput = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+    IsNewFileOrCanOverwrite : function(pathOutput, fileName)
+    {
+        var fileOutput = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
     fileOutput.initWithPath(pathOutput); 
     fileOutput.append(fileName);
     if(fileOutput.exists()){
@@ -280,7 +280,7 @@ var sbMafService = {
     }
     return true;
   },
-	
+    
 };
 
 var OverlayMAF = {
@@ -311,15 +311,15 @@ var OverlayMAF = {
 
 
     try{
-    	ver = newPrefsMAF.getCharPref("version");
-    	firstrun = newPrefsMAF.getBoolPref("firstrun");
+        ver = newPrefsMAF.getCharPref("version");
+        firstrun = newPrefsMAF.getBoolPref("firstrun");
     }catch(e){
       //nothing
     }finally{
       if (firstrun){
         newPrefsMAF.setBoolPref("firstrun",false);
         newPrefsMAF.setCharPref("version",current);
-      }		
+      }        
 
       if (ver!=current && !firstrun){ // !firstrun ensures that this section does not get loaded if its a first run.
         newPrefsMAF.setCharPref("version",current);

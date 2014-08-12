@@ -7,7 +7,7 @@
 <prefwindow id="sbmafPreferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefwindow.title;" width="440" height="250"
   ondialogaccept="return onDialogAccept()">
 
-	<!--JavaScript-->
+  <!--JavaScript-->
   <script type="application/x-javascript" src="chrome://sbmaf/content/options.js" />
 
   <prefpane id="pane1" label="&pane1.title;">
@@ -35,8 +35,3 @@
   </stringbundleset>
 
 </prefwindow>
-
-
-
-
-

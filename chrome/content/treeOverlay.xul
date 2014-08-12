@@ -5,20 +5,20 @@
 <overlay id="sbmafTreeOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-	<!--JavaScript-->
-	<script type="application/x-javascript" src="chrome://sbmaf/content/archiving/zipCreatorObject.js" />
-	<script type="application/x-javascript" src="chrome://sbmaf/content/archiving/zipDirectoryObject.js" />
+    <!--JavaScript-->
+    <script type="application/x-javascript" src="chrome://sbmaf/content/archiving/zipCreatorObject.js" />
+    <script type="application/x-javascript" src="chrome://sbmaf/content/archiving/zipDirectoryObject.js" />
 
-	<!--overlay to popup-->
-	<menupopup id="sbPopup">
-		<menuitem id="sbmafMenu"
-		          label="&sbmaf.tools.menu;"
-              oncommand="sbMafService.exec();"
-		          nodelay="true"
-		          insertbefore="sbPopupTools"
-              class="menuitem-iconic"
-              image="chrome://sbmaf/content/sbmaf.png"/>
-	</menupopup>
+    <!--overlay to popup-->
+    <menupopup id="sbPopup">
+        <menuitem id="sbmafMenu"
+                  label="&sbmaf.tools.menu;"
+                  oncommand="sbMafService.exec();"
+                  nodelay="true"
+                  insertbefore="sbPopupTools"
+                  class="menuitem-iconic"
+                  image="chrome://sbmaf/content/sbmaf.png"/>
+    </menupopup>
 
 </overlay>
 
