@@ -5,17 +5,18 @@
 <overlay id="sbmafSidebarOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-	<!--JavaScript-->
-	<script type="application/x-javascript" src="chrome://sbmaf/content/sbmaf.js" />
+    <!--JavaScript-->
+    <script type="application/x-javascript" src="chrome://sbmaf/content/common.js" />
+    <script type="application/x-javascript" src="chrome://sbmaf/content/sbmaf.js" />
 
-	<menu id="sbAddOns" hidden="false">
-		<menupopup id="sbAddOnsPopup">
-      <menuitem id="sbmafOptionsMenu" 
+    <menu id="sbAddOns" hidden="false">
+      <menupopup id="sbAddOnsPopup">
+        <menuitem id="sbmafOptionsMenu" 
                 label="&sbmaf.options;" 
                 oncommand="window.openDialog('chrome://sbmaf/content/options.xul','MAF Creator:Options','chrome,toolbar,centerscreen,modal');"
                 class="menuitem-iconic" 
                 image="chrome://sbmaf/content/sbmaf.png"/>
-		</menupopup>
-	</menu>
+      </menupopup>
+    </menu>
 
 </overlay>

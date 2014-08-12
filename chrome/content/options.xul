@@ -7,13 +7,15 @@
 <prefwindow id="sbmafPreferences" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&prefwindow.title;" width="440" height="250"
   ondialogaccept="return onDialogAccept()">
 
-	<!--JavaScript-->
+  <!--JavaScript-->
+  <script type="application/x-javascript" src="chrome://scrapbook/content/common.js" />
+  <script type="application/x-javascript" src="chrome://sbmaf/content/common.js" />
   <script type="application/x-javascript" src="chrome://sbmaf/content/options.js" />
 
   <prefpane id="pane1" label="&pane1.title;">
     <preferences>
-      <preference id="outputpath" name="extensions.scrapbook.maf.outputpath" type="string"/>
-      <preference id="multitoone" name="extensions.scrapbook.maf.multitoone" type="bool"/>
+      <preference id="outputpath" name="extensions.scrapbook.addon.maf.outputpath" type="string"/>
+      <preference id="multitoone" name="extensions.scrapbook.addon.maf.multitoone" type="bool"/>
     </preferences>
     <groupbox>
       <caption label="&group.paths;"/>
@@ -35,8 +37,3 @@
   </stringbundleset>
 
 </prefwindow>
-
-
-
-
-

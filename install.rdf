@@ -5,7 +5,7 @@
 
   <Description about="urn:mozilla:install-manifest">
     <em:id>scrapbookx.maf.creator@addons.mozilla.org</em:id>
-    <em:version>1.1.7</em:version>
+    <em:version>1.1.8</em:version>
     <em:type>2</em:type>
    
     <!-- Target Application this extension can install into, 
@@ -17,7 +17,7 @@
         <em:maxVersion>32.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-	
+    
     <!-- Front End MetaData -->
     <em:optionsURL>chrome://sbmaf/content/options.xul</em:optionsURL>
     <em:iconURL>chrome://sbmaf/content/sbmaf.png</em:iconURL>
@@ -26,7 +26,7 @@
     <em:homepageURL>https://github.com/danny0838/firefox-scrapbook-maf-creator</em:homepageURL>
     <em:creator>Danny Lin</em:creator>
     <em:developer>Gary Harris</em:developer>
-  	<em:contributor>Gomita</em:contributor>
+    <em:contributor>Gomita</em:contributor>
     <em:translator>ru-RU: Aganel (aganel@gmail.com)</em:translator>
     <em:translator>zh-CN: 天涯倦客 (http://t.qq.com/HeartBlade)</em:translator>
    
