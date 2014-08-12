@@ -1,3 +1,13 @@
+ScrapBook X MAF Creator 1.1.8
+----------------
+
+- UPDATE: Move preferences to "extensions.scrapbook.addon.maf.*".
+- FIXED: Sub-folders in a data item were not added to the maff pack correctly.
+- FIXED: No more shows error messages for separators and bookmarks when converting from a folder.
+- FIXED: Checks existence for the correct output file when converting from a folder.
+- FIXED: Wrong data creating time when converting from a folder.
+
+
 ScrapBook X MAF Creator 1.1.7
 ----------------
 
@@ -14,7 +24,7 @@ ScrapBook X MAF Creator 1.1.6
 ScrapBook X MAF Creator 1.1.5
 ----------------
 
-- COMPATIBLE WITH: <u>ScrapBook X 1.12.0a20</u>, <u>ScrapBook Plus 1.9.24.40b3</u>, and <u>ScrapBook 1.5.9</u>.
+- COMPATIBLE WITH: ScrapBook X 1.12.0a20, ScrapBook Plus 1.9.24.40b3, and ScrapBook 1.5.9.
 - UPDATE: Moved help documentation to the online wiki.
 - UPDATE: Added zh-tw localization.
 - UPDATE: Internal code optomization.
