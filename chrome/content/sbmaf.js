@@ -22,9 +22,6 @@ var sbMafService = {
     zipW : null,
 
     strings : null,
-    oSBTree : null,
-    oSBData : null,
-    oSBUtils : null,
     
     exec : function()
     {
@@ -32,37 +29,18 @@ var sbMafService = {
         var strbundle = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
         this.strings = strbundle.createBundle("chrome://sbmaf/locale/overlay.properties"); 
 
-        // Support SB and SB+.
-        // API changes in SB 1.4.0 and again in 1.4.7 broke this extension. The same changes weren't made in SB+
-        // NOTE: ScrapBookUtils and ScrapBookData are now in the "modules" directory, not in the .jar.
-        if (typeof(sbTreeUI) == "object"){
-            // SB 1.4.0 or later.
-            this.oSBTree = sbTreeUI;
-            this.oSBData = ScrapBookData;
-            this.oSBUtils = ScrapBookUtils;
-        }
-        else if (typeof(sbTreeHandler) == "object"){
-            // SB < 1.4.0 or SB+.
-            this.oSBTree = sbTreeHandler;
-            this.oSBData = sbDataSource;
-            this.oSBUtils = sbCommonUtils;
-        }
-        else{
-            var sbVersion = this.strings.GetStringFromName("sbVersion");
-            return alert(sbVersion);
-        }
         // Get selected entry.
         var selectEntry = this.strings.GetStringFromName("selectEntry");
-        var aRes = this.oSBTree.resource ? this.oSBTree.resource : (sbController.isTreeContext ? sbTreeHandler.resource : sbListHandler.resource);
+        var aRes = sbMafTree.resource;
         if (aRes === null) {
             alert(selectEntry);
             return false;
         }
 
-        this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
+        this.entryTitle = (sbMafData.getProperty(aRes, "title"));
 
-        var id = this.oSBData.getProperty(aRes, "id");
-        this.contentDir = this.oSBUtils.getContentDir(id, true);
+        var id = sbMafData.getProperty(aRes, "id");
+        this.contentDir = sbMafCommon.getContentDir(id, true);
 
         // Get datetime.
         id.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/);
@@ -72,10 +50,8 @@ var sbMafService = {
         );
         this.dateTime = dd;
 
-
-        var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-        var bMulti = prefs.getBoolPref("extensions.scrapbook.maf.multitoone");
-        var pathOutput = prefs.getCharPref("extensions.scrapbook.maf.outputpath");
+        var bMulti = sbMafCommon.getBoolPref("multitoone", false);
+        var pathOutput = sbMafCommon.copyUnicharPref("outputpath", "");
         
         // If user output path not set, prompt.
         if (pathOutput == "") {
@@ -83,10 +59,9 @@ var sbMafService = {
             alert(errorPathEmpty);
             return false;
         }
-        pathOutput = this.oSBUtils.convertToUnicode(pathOutput, "UTF-8");
-        if (!this.oSBData.isContainer(aRes)) {
+        if (!sbMafData.isContainer(aRes)) {
             // Create the MAF.
-            if (!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))) {
+            if (!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))) {
                 return false;
             }
             // An exception returned here from handleError() aborts the script.
@@ -124,7 +99,7 @@ var sbMafService = {
         txtContent += "         xmlns:NC=\"http://home.netscape.com/NC-rdf#\"\n";
         txtContent += "         xmlns:RDF=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n";
         txtContent += "  <RDF:Description RDF:about=\"urn:root\">\n";
-        txtContent += "    <MAF:originalurl RDF:resource=\"" + this.oSBData.getProperty(aRes, "source") + "\"/>\n";
+        txtContent += "    <MAF:originalurl RDF:resource=\"" + sbMafData.getProperty(aRes, "source") + "\"/>\n";
         txtContent += "    <MAF:title RDF:resource=\"" + this.entryTitle + "\"/>\n";
         txtContent += "    <MAF:archivetime RDF:resource=\"" + this.dateTime + "\"/>\n";
         txtContent += "    <MAF:indexfilename RDF:resource=\"index.html\"/>\n";
@@ -135,7 +110,7 @@ var sbMafService = {
         this.fileRDF = this.contentDir.clone();
         this.fileRDF.append("index.rdf");
 
-        this.oSBUtils.writeFile(this.fileRDF, txtContent, "UTF-8");
+        sbMafCommon.writeFile(this.fileRDF, txtContent, "UTF-8");
     },
     
     CreateZip : function(pathOutput)
@@ -145,7 +120,7 @@ var sbMafService = {
         
         var zipFile = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
         zipFile.initWithPath(pathOutput);
-        zipFile.append(this.oSBUtils.validateFileName(this.entryTitle) + ".maff");
+        zipFile.append(sbMafCommon.validateFileName(this.entryTitle) + ".maff");
         
         this.zipW.open(zipFile, this.PR_RDWR | this.PR_CREATE_FILE | this.PR_TRUNCATE);
     },
@@ -198,17 +173,10 @@ var sbMafService = {
 
     processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
     {
-        if (typeof(sbTreeUI) == "object"){
-            // SB 1.4.7 API changes.
-            this.oSBUtils.RDFC.Init(this.oSBData._dataSource, aRes);
-        }
-        else {
-            // SB prior to 1.4.7 and SB+.
-            this.oSBUtils.RDFC.Init(this.oSBData.data, aRes);
-        }
-        var resEnum = this.oSBUtils.RDFC.GetElements();
+        sbMafCommon.RDFC.Init(sbMafData.data, aRes);
+        var resEnum = sbMafCommon.RDFC.GetElements();
 
-        this.entryTitle = (this.oSBData.getProperty(aRes, "title"));
+        this.entryTitle = (sbMafData.getProperty(aRes, "title"));
         try {
             // Store multiple stored sites in one archive.
             // Prevent zip writing during recursion.
@@ -218,17 +186,17 @@ var sbMafService = {
             while ( resEnum.hasMoreElements() )
             {
                 var res = resEnum.getNext();
-                if ( this.oSBData.isContainer(res) ) {
+                if ( sbMafData.isContainer(res) ) {
                     if ( aRecursive ){
                         this.processFolderRecursively(res, pathOutput, bMulti, aRecursive, true);
                     }
                 }
                 else {
-                    this.entryTitle = (this.oSBData.getProperty(res, "title"));
-                    var id = this.oSBData.getProperty(res, "id");
-                    this.contentDir = this.oSBUtils.getContentDir(id, true);
+                    this.entryTitle = (sbMafData.getProperty(res, "title"));
+                    var id = sbMafData.getProperty(res, "id");
+                    this.contentDir = sbMafCommon.getContentDir(id, true);
       
-                    if(!this.IsNewFileOrCanOverwrite(pathOutput, this.oSBUtils.validateFileName(this.entryTitle + ".maff"))){
+                    if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
                         continue;
                     }
 

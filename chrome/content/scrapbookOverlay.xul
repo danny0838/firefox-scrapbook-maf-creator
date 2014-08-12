@@ -6,6 +6,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <!--JavaScript-->
+    <script type="application/x-javascript" src="chrome://sbmaf/content/common.js" />
     <script type="application/x-javascript" src="chrome://sbmaf/content/sbmaf.js" />
 
     <menu id="sbAddOns" hidden="false">
