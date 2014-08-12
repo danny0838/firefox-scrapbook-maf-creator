@@ -1,5 +1,5 @@
 (function(){
-    var PREF = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.scrapbook.maf.");
+    var PREF = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.scrapbook.addon.maf.");
 
     var oSBCommon = ("ScrapBookUtils" in window) ? ScrapBookUtils : sbCommonUtils;
     var oSBData = ("ScrapBookData" in window) ? ScrapBookData : ("sbDataSource" in window) ? sbDataSource : null;
