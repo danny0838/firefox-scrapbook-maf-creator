@@ -20,17 +20,11 @@ var sbMafService = {
     fileRDF : null,
     dateTime : null,
     zipW : null,
-
-    strings : null,
     
     exec : function()
     {
-        // Get property strings.
-        var strbundle = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
-        this.strings = strbundle.createBundle("chrome://sbmaf/locale/overlay.properties"); 
-
         // Get selected entry.
-        var selectEntry = this.strings.GetStringFromName("selectEntry");
+        var selectEntry = sbMafCommon.lang("overlay", "selectEntry");
         var aRes = sbMafTree.resource;
         if (aRes === null) {
             alert(selectEntry);
@@ -55,7 +49,7 @@ var sbMafService = {
         
         // If user output path not set, prompt.
         if (pathOutput == "") {
-            var errorPathEmpty = this.strings.GetStringFromName("errorPathEmpty");
+            var errorPathEmpty = sbMafCommon.lang("overlay", "errorPathEmpty");
             alert(errorPathEmpty);
             return false;
         }
@@ -156,7 +150,7 @@ var sbMafService = {
             fileRdf.append("index.rdf");
             fileRdf.remove(false);
         }catch(e if e.name == "NS_ERROR_FILE_ACCESS_DENIED"){
-            var errorAccess = this.strings.GetStringFromName("errorAccess");
+            var errorAccess = sbMafCommon.lang("overlay", "errorAccess");
             alert(errorAccess);
         }catch(e){
             this.HandleError(e);
@@ -165,8 +159,8 @@ var sbMafService = {
 
     ReportCompletion : function()
     {
-        var alertLabel = this.strings.GetStringFromName("alertLabel");
-        var alertMessage = this.strings.GetStringFromName("alertMessage");
+        var alertLabel = sbMafCommon.lang("overlay", "alertLabel");
+        var alertMessage = sbMafCommon.lang("overlay", "alertMessage");
         var alerts = Components.classes["@mozilla.org/alerts-service;1"].getService(Components.interfaces.nsIAlertsService);
         alerts.showAlertNotification("chrome://sbmaf/content/sbmaf.png", alertLabel, alertMessage, false, "", null);
     },
@@ -230,7 +224,7 @@ var sbMafService = {
 
     HandleError : function(e)
     {
-        alert(this.strings.formatStringFromName("errorText", [e.name, e.message], 2));
+        alert(sbMafCommon.lang("overlay", "errorText", [e.name, e.message]));
         // Abort the script.
         throw "stop";
     },
@@ -242,7 +236,7 @@ var sbMafService = {
         fileOutput.initWithPath(pathOutput); 
         fileOutput.append(fileName);
         if(fileOutput.exists()){
-            if(!confirm(this.strings.formatStringFromName("promptOverwrite", [fileOutput.path], 1))){
+            if(!confirm(sbMafCommon.lang("overlay", "promptOverwrite", [fileOutput.path]))){
                 return false;
             }
         }

@@ -1,18 +1,10 @@
-// Get property strings.
-var strbundle = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
-this.strings = strbundle.createBundle("chrome://sbmaf/locale/prefwindow.properties"); 
-
 // Get the path to the output directory.
 function onOutputBrowse()
 {
-    // Get property strings.
-    var strbundle = document.getElementById("strings");
-    var browseFolder = strbundle.getString('browseFolder');
-
     // Init a file picker and display it.
     var nsIFilePicker = Components.interfaces.nsIFilePicker;
     var fp = Components.classes["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    fp.init(window, browseFolder, nsIFilePicker.modeGetFolder);
+    fp.init(window, sbMafCommon.lang("prefwindow", "browseFolder"), nsIFilePicker.modeGetFolder);
 
     var res = fp.show();
     if (res == nsIFilePicker.returnOK){
@@ -41,7 +33,7 @@ function onDialogAccept()
     var ret = true;
 
     if(pathOutput.value == ""){
-        var errorPathEmpty = this.strings.GetStringFromName("errorPathEmpty");
+        var errorPathEmpty = sbMafCommon.lang("prefwindow", "errorPathEmpty");
         alert(errorPathEmpty);
         ret = false;
     }
@@ -49,7 +41,7 @@ function onDialogAccept()
         var fileOutput = Components.classes['@mozilla.org/file/local;1'].createInstance(Components.interfaces.nsILocalFile);
         fileOutput.initWithPath(pathOutput.value);
         if(!fileOutput.exists()){
-            alert(this.strings.formatStringFromName("errorPathInvalid", [pathOutput.value], 1));
+            alert(sbMafCommon.lang("prefwindow", "errorPathInvalid", [pathOutput.value]));
             ret = false;
         }
     }

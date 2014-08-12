@@ -8,6 +8,10 @@
     var oSBList = ("sbListHandler" in window) ? sbListHandler : null;
 
     window.sbMafCommon = {
+        get BUNDLE() {
+            return oSBCommon.BUNDLE;
+        },
+
         get RDFC() {
             return oSBCommon.RDFC;
         },
@@ -26,6 +30,25 @@
 
         writeFile : function(aFile, aContent, aChars, aNoCatch) {
             return oSBCommon.writeFile(aFile, aContent, aChars, aNoCatch);
+        },
+
+        _stringBundles : [],
+        
+        lang : function(aBundle, aName, aArgs){
+            var bundle = this._stringBundles[aBundle];
+            if (!bundle) {
+                var uri = "chrome://sbmaf/locale/%s.properties".replace("%s", aBundle);
+                bundle = this._stringBundles[aBundle] = this.BUNDLE.createBundle(uri);
+            }
+            try {
+                if (!aArgs)
+                    return bundle.GetStringFromName(aName);
+                else
+                    return bundle.formatStringFromName(aName, aArgs, aArgs.length);
+            }
+            catch (ex) {
+            }
+            return aName;
         },
 
         getBoolPref : function(aName, aDefaultValue) {

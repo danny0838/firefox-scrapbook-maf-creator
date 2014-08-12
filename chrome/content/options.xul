@@ -8,6 +8,8 @@
   ondialogaccept="return onDialogAccept()">
 
   <!--JavaScript-->
+  <script type="application/x-javascript" src="chrome://scrapbook/content/common.js" />
+  <script type="application/x-javascript" src="chrome://sbmaf/content/common.js" />
   <script type="application/x-javascript" src="chrome://sbmaf/content/options.js" />
 
   <prefpane id="pane1" label="&pane1.title;">
