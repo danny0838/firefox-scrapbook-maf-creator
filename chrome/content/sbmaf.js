@@ -125,18 +125,23 @@ var sbMafService = {
     
     ZipEntry : function()
     {
-        this.zipW.addEntryDirectory(this.contentDir.leafName, 0, false);
-        // Loop through the files in the dir and find the content files.
-        var entries = this.contentDir.directoryEntries;
-        while(entries.hasMoreElements())
-        {
-            var entry = entries.getNext();
-            entry.QueryInterface(Components.interfaces.nsIFile);
-            // Skip pre-existing .maffs.
-            if (entry.leafName.substr(entry.leafName.lastIndexOf('.'), 5) == ".maff"){
-                continue;
+        var base = this.contentDir.leafName;
+        this.zipW.addEntryDirectory(base, 0, false);
+        var dirArr = [this.contentDir]; //adds dirs to this as it finds it
+        for (var i=0; i<dirArr.length; i++) {
+            var dirEntries = dirArr[i].directoryEntries;
+            while (dirEntries.hasMoreElements()) {
+                var entry = dirEntries.getNext().QueryInterface(Components.interfaces.nsIFile);
+                if (entry.isDirectory()) {
+                   dirArr.push(entry);
+                   continue;
+                }
+                var relPath = entry.path.replace(dirArr[0].path, ''); //need relative because we need to use this for telling addEntryFile where in the zip it should create it, and because zip is a copy of the directory
+                var saveInZipAs = relPath.substr(1); //need to get ride of the first '\' forward slash at start otherwise it puts every file added in a folder of its own.
+                saveInZipAs = saveInZipAs.replace(/\\/g, '/'); //remember MUST use forward slash (/)
+                saveInZipAs = base + "/" + saveInZipAs;
+                this.zipW.addEntryFile(saveInZipAs, Components.interfaces.nsIZipWriter.COMPRESSION_BEST, entry, false);
             }
-            this.zipW.addEntryFile(this.contentDir.leafName + "/" + entry.leafName, Components.interfaces.nsIZipWriter.COMPRESSION_BEST, entry, false);
         }
     },
 
