@@ -18,7 +18,6 @@ var sbMafService = {
     contentDir : null,
     resource : null,
     fileRDF : null,
-    dateTime : null,
     zipW : null,
     
     exec : function()
@@ -35,14 +34,6 @@ var sbMafService = {
 
         var id = sbMafData.getProperty(aRes, "id");
         this.contentDir = sbMafCommon.getContentDir(id, true);
-
-        // Get datetime.
-        id.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/);
-        var dd = new Date(
-            parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10) - 1, parseInt(RegExp.$3, 10),
-            parseInt(RegExp.$4, 10), parseInt(RegExp.$5, 10), parseInt(RegExp.$6, 10)
-        );
-        this.dateTime = dd;
 
         var bMulti = sbMafCommon.getBoolPref("multitoone", false);
         var pathOutput = sbMafCommon.copyUnicharPref("outputpath", "");
@@ -87,6 +78,14 @@ var sbMafService = {
     
     CreateRDF : function(aRes)
     {
+        // Get datetime.
+        var id = sbMafData.getProperty(aRes, "id");
+        id.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/);
+        var dateTime = new Date(
+            parseInt(RegExp.$1, 10), parseInt(RegExp.$2, 10) - 1, parseInt(RegExp.$3, 10),
+            parseInt(RegExp.$4, 10), parseInt(RegExp.$5, 10), parseInt(RegExp.$6, 10)
+        );
+
         var txtContent = "";
         txtContent += "<?xml version=\"1.0\"?>\n";
         txtContent += "<RDF:RDF xmlns:MAF=\"http://maf.mozdev.org/metadata/rdf#\"\n";
@@ -95,7 +94,7 @@ var sbMafService = {
         txtContent += "  <RDF:Description RDF:about=\"urn:root\">\n";
         txtContent += "    <MAF:originalurl RDF:resource=\"" + sbMafData.getProperty(aRes, "source") + "\"/>\n";
         txtContent += "    <MAF:title RDF:resource=\"" + this.entryTitle + "\"/>\n";
-        txtContent += "    <MAF:archivetime RDF:resource=\"" + this.dateTime + "\"/>\n";
+        txtContent += "    <MAF:archivetime RDF:resource=\"" + dateTime + "\"/>\n";
         txtContent += "    <MAF:indexfilename RDF:resource=\"index.html\"/>\n";
         txtContent += "    <MAF:charset RDF:resource=\"UTF-8\"/>\n";
         txtContent += "  </RDF:Description>\n";
