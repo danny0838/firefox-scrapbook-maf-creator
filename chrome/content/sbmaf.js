@@ -92,8 +92,8 @@ var sbMafService = {
         txtContent += "         xmlns:NC=\"http://home.netscape.com/NC-rdf#\"\n";
         txtContent += "         xmlns:RDF=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n";
         txtContent += "  <RDF:Description RDF:about=\"urn:root\">\n";
-        txtContent += "    <MAF:originalurl RDF:resource=\"" + sbMafData.getProperty(aRes, "source") + "\"/>\n";
-        txtContent += "    <MAF:title RDF:resource=\"" + this.entryTitle + "\"/>\n";
+        txtContent += "    <MAF:originalurl RDF:resource=\"" + sbMafCommon.escapeHTML(sbMafData.getProperty(aRes, "source")) + "\"/>\n";
+        txtContent += "    <MAF:title RDF:resource=\"" + sbMafCommon.escapeHTML(this.entryTitle) + "\"/>\n";
         txtContent += "    <MAF:archivetime RDF:resource=\"" + dateTime + "\"/>\n";
         txtContent += "    <MAF:indexfilename RDF:resource=\"index.html\"/>\n";
         txtContent += "    <MAF:charset RDF:resource=\"UTF-8\"/>\n";

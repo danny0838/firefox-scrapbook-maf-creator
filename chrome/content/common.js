@@ -32,6 +32,11 @@
             return oSBCommon.writeFile(aFile, aContent, aChars, aNoCatch);
         },
 
+        escapeHTML : function(aStr) {
+            var list = {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" };
+            return aStr.replace(/[&<>"]/g, function(m){ return list[m]; });
+        },
+
         _stringBundles : [],
         
         lang : function(aBundle, aName, aArgs){
