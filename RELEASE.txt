@@ -1,3 +1,9 @@
+ScrapBook X MAF Creator 1.1.10
+----------------
+
+- FIXED: Generated maff cannot be loaded correctly if the title or source URL contains special chars.
+
+
 ScrapBook X MAF Creator 1.1.9
 ----------------
 
