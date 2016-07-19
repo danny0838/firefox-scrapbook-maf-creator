@@ -22,7 +22,11 @@
 
     window.sbMafCommon = {
         get BUNDLE() {
-            return oSBCommon.BUNDLE;
+            if (oSBCommon.BUNDLE) {
+                return oSBCommon.BUNDLE;
+            }
+            delete this.BUNDLE;
+            return this.BUNDLE = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
         },
 
         get RDFC() {
