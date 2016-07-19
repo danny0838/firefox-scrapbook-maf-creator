@@ -44,34 +44,11 @@ var sbMafService = {
             alert(errorPathEmpty);
             return false;
         }
-        if (!sbMafData.isContainer(aRes)) {
-            // Create the MAF.
-            if (!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))) {
-                return false;
-            }
-            // An exception returned here from handleError() aborts the script.
-            try{
-                try{
-                    this.CreateRDF(aRes);
-                    this.CreateZip(pathOutput);
-                    this.ZipEntry();
-                    this.CloseZip();
-                    this.PostProcess();
-                }catch(e){
-                    this.HandleError(e);
-                }
-                this.ReportCompletion();
-            }catch(e){
-                return false;
-            }
-        }
-        else {
-            // An exception returned here from handleError() aborts the script.
-            try{
-                this.processFolderRecursively(aRes, pathOutput, bMulti, true);
-            }catch(e){
-                return false;
-            }
+        // An exception returned here from handleError() aborts the script.
+        try{
+            this.processItemRecursively(aRes, pathOutput, bMulti, true);
+        }catch(e){
+            return false;
         }
         return true;
     },
@@ -169,11 +146,8 @@ var sbMafService = {
         alerts.showAlertNotification("chrome://sbmaf/content/sbmaf.png", alertLabel, alertMessage, false, "", null);
     },
 
-    processFolderRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
+    processItemRecursively : function(aRes, pathOutput, bMulti, aRecursive, bRecurring)
     {
-        sbMafCommon.RDFC.Init(sbMafData.data, aRes);
-        var resEnum = sbMafCommon.RDFC.GetElements();
-
         this.entryTitle = (sbMafData.getProperty(aRes, "title"));
         try {
             // Store multiple stored sites in one archive.
@@ -184,38 +158,40 @@ var sbMafService = {
                 }
                 this.CreateZip(pathOutput);
             }
-            while ( resEnum.hasMoreElements() )
-            {
-                var res = resEnum.getNext();
-                if ( sbMafData.isContainer(res) ) {
-                    if ( aRecursive ){
-                        this.processFolderRecursively(res, pathOutput, bMulti, aRecursive, true);
-                    }
-                }
-                else {
-                    this.entryTitle = (sbMafData.getProperty(res, "title"));
-                    var id = sbMafData.getProperty(res, "id");
-                    this.contentDir = sbMafCommon.getContentDir(id, true);
-                    if (!this.contentDir) continue;
+            if ( sbMafData.getProperty(aRes, "type") != "folder" ) {
+                var that = this;
+                (function() {
+                    var id = sbMafData.getProperty(aRes, "id");
+                    that.contentDir = sbMafCommon.getContentDir(id, true);
+                    if (!that.contentDir) return;
 
                     // Create the MAF.
                     // Store each stored site in it's own archive.
                     if(!bMulti){
-                        if(!this.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(this.entryTitle + ".maff"))){
-                            continue;
+                        if(!that.IsNewFileOrCanOverwrite(pathOutput, sbMafCommon.validateFileName(that.entryTitle + ".maff"))){
+                            return;
                         }
-                        this.CreateZip(pathOutput);
+                        that.CreateZip(pathOutput);
                     }
 
-                    this.CreateRDF(res);
-                    this.ZipEntry();
+                    that.CreateRDF(aRes);
+                    that.ZipEntry();
 
                     // Store each stored site in it's own archive.
                     if(!bMulti){
-                        this.CloseZip();
+                        that.CloseZip();
                     }
             
-                    this.PostProcess();
+                    that.PostProcess();
+                })();
+            }
+            if ( sbMafData.isContainer(aRes) && (aRecursive || typeof(bRecurring) == 'undefined') ) {
+                sbMafCommon.RDFC.Init(sbMafData.data, aRes);
+                var resEnum = sbMafCommon.RDFC.GetElements();
+                while ( resEnum.hasMoreElements() )
+                {
+                    res = resEnum.getNext();
+                    this.processItemRecursively(res, pathOutput, bMulti, aRecursive, true);
                 }
             }
             // Store multiple stored sites in one archive.
