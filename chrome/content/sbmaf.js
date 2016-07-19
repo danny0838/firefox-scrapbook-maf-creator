@@ -20,7 +20,7 @@ var sbMafService = {
     fileRDF : null,
     zipW : null,
     
-    exec : function()
+    exec : function(aRecursive)
     {
         // Get selected entry.
         var selectEntry = sbMafCommon.lang("overlay", "selectEntry");
@@ -46,7 +46,7 @@ var sbMafService = {
         }
         // An exception returned here from handleError() aborts the script.
         try{
-            this.processItemRecursively(aRes, pathOutput, bMulti, true);
+            this.processItemRecursively(aRes, pathOutput, bMulti, aRecursive);
         }catch(e){
             return false;
         }

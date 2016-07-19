@@ -9,7 +9,8 @@
     <menupopup id="sbPopup">
         <menuitem id="sbmafMenu"
                   label="&sbmaf.tools.menu;"
-                  oncommand="sbMafService.exec();"
+                  oncommand="sbMafService.exec(true);"
+                  onclick="if ( event.button == 1 ) sbMafService.exec(false); document.getElementById('sbPopup').hidePopup();"
                   nodelay="true"
                   insertbefore="sbPopupTools"
                   class="menuitem-iconic"
