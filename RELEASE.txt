@@ -1,3 +1,12 @@
+ScrapBook X MAF Creator 1.1.11
+----------------
+
+- COMPATIBLE WITH: ScrapBook X 1.13.0b7, ScrapBook Plus 1.9.24.40, and ScrapBook 1.5.13.
+- FIXED: Unable to initialize sometimes.
+- UPDATE: Allow non-recursive maff making via mid-click.
+- UPDATE: Homepage now links to Firefox Addon site.
+
+
 ScrapBook X MAF Creator 1.1.10
 ----------------
 
