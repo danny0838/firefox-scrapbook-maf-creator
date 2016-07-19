@@ -23,7 +23,7 @@
     <em:iconURL>chrome://sbmaf/content/sbmaf.png</em:iconURL>
     <em:name>ScrapBook X MAF Creator</em:name>
     <em:description>Mozilla Archive Format creator for Firefox Scrapbook extension.</em:description>
-    <em:homepageURL>https://github.com/danny0838/firefox-scrapbook-maf-creator</em:homepageURL>
+    <em:homepageURL>http://addons.mozilla.org/firefox/addon/scrapbookx-maf-creator</em:homepageURL>
     <em:creator>Danny Lin</em:creator>
     <em:developer>Gary Harris</em:developer>
     <em:contributor>Gomita</em:contributor>
